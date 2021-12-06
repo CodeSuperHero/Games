@@ -1,32 +1,10 @@
-# Prerequisites
-*.d
-
-# Compiled Object files
-*.slo
-*.lo
-*.o
-*.obj
-
-# Precompiled Headers
-*.gch
-*.pch
-
-# Compiled Dynamic libraries
-*.so
-*.dylib
-*.dll
-
-# Fortran module files
-*.mod
-*.smod
-
-# Compiled Static libraries
-*.lai
-*.la
-*.a
-*.lib
-
-# Executables
-*.exe
-*.out
-*.app
+srp/.vs
+srp/.vsconfig
+srp/.vscode
+srp/[Ll]ibrary/
+srp/[Tt]emp/
+srp/[Oo]bj/
+srp/[Bb]uild/
+srp/[Bb]uilds/
+srp/[Ll]ogs/
+srp/[Uu]ser[Ss]ettings/
