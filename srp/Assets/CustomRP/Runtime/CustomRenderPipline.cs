@@ -10,10 +10,12 @@ public class CustomRenderPipline : RenderPipeline
 
     bool useDynamicBatching, useGPUInstancing;
 
-    public CustomRenderPipline(bool useDynamicBatching, bool useGPUInstancing, bool useSRPBatcher) {
+    public CustomRenderPipline(bool useDynamicBatching, bool useGPUInstancing, bool useSRPBatcher)
+    {
         this.useDynamicBatching = useDynamicBatching;
         this.useGPUInstancing = useGPUInstancing;
         GraphicsSettings.useScriptableRenderPipelineBatching = useSRPBatcher;
+        GraphicsSettings.lightsUseLinearIntensity = true;
     }
 
     protected override void Render(ScriptableRenderContext context, Camera[] cameras)

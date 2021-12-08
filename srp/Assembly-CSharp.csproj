@@ -41,8 +41,9 @@
      <Compile Include="Assets\Scripts\MeshBall.cs" />
      <Compile Include="Assets\CustomRP\Runtime\CameraRenderer.cs" />
      <Compile Include="Assets\CustomRP\Runtime\CustomRenderPipline.cs" />
-     <Compile Include="Assets\Scripts\PerObjectMaterialProperties.cs" />
      <Compile Include="Assets\Scripts\Lighting.cs" />
+     <Compile Include="Assets\Scripts\PerObjectMaterialProperties.cs" />
+     <None Include="Assets\CustomRP\ShaderLibrary\BRDF.hlsl" />
      <None Include="Assets\CustomRP\Shaders\LitPass.hlsl" />
      <None Include="Assets\CustomRP\ShaderLibrary\Lighting.hlsl" />
      <None Include="Assets\CustomRP\ShaderLibrary\Light.hlsl" />
