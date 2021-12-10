@@ -19,14 +19,16 @@
         BRDF brdf;
         float oneMinusReflectivity = OneMinusReflectivity(surface.metallic);
         brdf.diffuse = surface.color * oneMinusReflectivity;
-        brdf.specular = 0.0;//lerp(MIN_REFLECTIVITY, surface.color, surface.metallic);
+        brdf.specular = surface.color - brdf.diffuse;
+        brdf.specular = lerp(MIN_REFLECTIVITY, surface.color, surface.metallic);
         float perceptualRoughness = PerceptualSmoothnessToPerceptualRoughness(surface.smoothness);
-        brdf.roughness = 1.0;//PerceptualRoughnessToRoughness(perceptualRoughness);
+        brdf.roughness = PerceptualRoughnessToRoughness(perceptualRoughness);
         return brdf;
     }
 
+
     float SpecularStrength (Surface surface, BRDF brdf, Light light) {
-        float h = SafeNormalize(light.direction + surface.viewDirection);
+        float3 h = SafeNormalize(light.direction + surface.viewDirection);
         float nh2 = Square(saturate(dot(surface.normal, h)));
         float lh2 = Square(saturate(dot(light.direction, h)));
         float r2 = Square(brdf.roughness);
@@ -35,7 +37,7 @@
         return r2 / (d2 * max(0.1, lh2) * normalization);
     }
 
-    float DirectBRDF (Surface surface, BRDF brdf, Light light) {
+    float3 DirectBRDF (Surface surface, BRDF brdf, Light light) {
         return SpecularStrength(surface, brdf, light) * brdf.specular + brdf.diffuse;
     }
 #endif
