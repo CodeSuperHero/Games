@@ -18,7 +18,7 @@ public partial class CameraRenderer
 
     Lighting lighting = new Lighting();
 
-    public void Render(ScriptableRenderContext context, Camera camera, bool useDynamicBatching, bool useGPUInstancing)
+    public void Render(ScriptableRenderContext context, Camera camera, bool useDynamicBatching, bool useGPUInstancing, ShadowSettings shadowSettings)
     {
         this.context = context;
         this.camera = camera;
@@ -27,21 +27,24 @@ public partial class CameraRenderer
 
         PrepareForSceneWindow();
 
-        if (!Cull())
+        if (!Cull(shadowSettings.maxDistance))
         {
             return;
         }
 
-        Setup();
+        buffer.BeginSample(SampleName);
+        ExecuteBuffer();
+        lighting.Setup(context, cullingResults, shadowSettings);
+        buffer.EndSample(SampleName);
 
-        lighting.Setup(context, cullingResults);
+        Setup();
 
         DrawVisibleGeometry(useDynamicBatching, useGPUInstancing);
 
         DrawUnsupportedShaders();
 
         DrawGizmos();
-
+        lighting.Cleanup();
         Submit();
     }
 
@@ -49,7 +52,7 @@ public partial class CameraRenderer
     {
         context.SetupCameraProperties(camera);
         CameraClearFlags flags = camera.clearFlags;
-        buffer.ClearRenderTarget(flags <= CameraClearFlags.Depth, flags == CameraClearFlags.Color, flags == CameraClearFlags.Color ? camera.backgroundColor.linear :  Color.clear);
+        buffer.ClearRenderTarget(flags <= CameraClearFlags.Depth, flags == CameraClearFlags.Color, flags == CameraClearFlags.Color ? camera.backgroundColor.linear : Color.clear);
         buffer.BeginSample(SampleName);
         ExecuteBuffer();
     }
@@ -88,10 +91,11 @@ public partial class CameraRenderer
         buffer.Clear();
     }
 
-    private bool Cull()
+    private bool Cull(float maxShadownDistance)
     {
         if (camera.TryGetCullingParameters(out ScriptableCullingParameters p))
         {
+            p.shadowDistance = Mathf.Min(maxShadownDistance, camera.farClipPlane);
             cullingResults = context.Cull(ref p);
             return true;
         }

@@ -10,19 +10,22 @@ public class CustomRenderPipline : RenderPipeline
 
     bool useDynamicBatching, useGPUInstancing;
 
-    public CustomRenderPipline(bool useDynamicBatching, bool useGPUInstancing, bool useSRPBatcher)
+    ShadowSettings shadowSettings;
+
+    public CustomRenderPipline(bool useDynamicBatching, bool useGPUInstancing, bool useSRPBatcher, ShadowSettings shadowSettings)
     {
         this.useDynamicBatching = useDynamicBatching;
         this.useGPUInstancing = useGPUInstancing;
         GraphicsSettings.useScriptableRenderPipelineBatching = useSRPBatcher;
         GraphicsSettings.lightsUseLinearIntensity = true;
+        this.shadowSettings = shadowSettings;
     }
 
     protected override void Render(ScriptableRenderContext context, Camera[] cameras)
     {
         foreach (var cam in cameras)
         {
-            renderer.Render(context, cam, useDynamicBatching, useGPUInstancing);
+            renderer.Render(context, cam, useDynamicBatching, useGPUInstancing, shadowSettings);
         }
     }
 }
