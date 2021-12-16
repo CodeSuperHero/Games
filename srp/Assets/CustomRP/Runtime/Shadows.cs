@@ -87,7 +87,12 @@ public class Shadows
     {
         ShadowedDirectionalLight light = ShadowedDirectionalLights[index];
         var shadowSettings = new ShadowDrawingSettings(cullingResults, light.visibleLightIndex);
-
+        cullingResults.ComputeDirectionalShadowMatricesAndCullingPrimitives(light.visibleLightIndex, 0, 1, Vector3.zero, tileSize, 0f,
+        out Matrix4x4 viewMatrix, out Matrix4x4 projectionMatrix, out ShadowSplitData splitData);
+        shadowSettings.splitData = splitData;
+        buffer.SetViewProjectionMatrices(viewMatrix, projectionMatrix);
+        ExecuteBuffer();
+        context.DrawShadows(ref shadowSettings);
     }
 
     public void Cleanup()
